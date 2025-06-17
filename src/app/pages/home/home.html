@@ -4,4 +4,12 @@
     <mat-button-toggle value="income">Income</mat-button-toggle>
     <mat-button-toggle value="expense">Expense</mat-button-toggle>
   </mat-button-toggle-group>
+  <mat-form-field>
+    <mat-label>Choose a date</mat-label>
+    <input matInput [matDatepicker]="picker">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 </div>
+
