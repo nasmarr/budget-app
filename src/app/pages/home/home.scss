@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;    // horizontal center
   align-items: center;        // vertical center
   height: 100vh;              // full viewport height
