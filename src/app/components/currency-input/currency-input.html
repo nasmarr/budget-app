@@ -1,1 +1,3 @@
-<input type="text" inputmode="decimal" currencyMask formControlName="value" />
+<mat-form-field class="currency-field-width">
+  <input matInput placeholder="$0.00" type="text" inputmode="decimal" [currencyMask]="{align: 'center'}" formControlName="amount" />
+</mat-form-field>
