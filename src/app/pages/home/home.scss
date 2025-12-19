@@ -1,9 +1,18 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;    // horizontal center
-  align-items: center;        // vertical center
-  height: 100vh;              // full viewport height
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  gap: 16px;
 }
 
 app-currency-input {
@@ -14,7 +23,17 @@ mat-button-toggle {
   font-size: 24px;
 }
 
+mat-button-toggle-group {
+  margin: 8px 0;
+}
+
 mat-form-field {
-  padding: 16px;
+  width: 50%;
+}
+
+button[type="submit"] {
+  margin-top: 16px;
+  padding: 12px 32px;
+  font-size: 16px;
 }
 

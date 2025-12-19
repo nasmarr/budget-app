@@ -1,3 +1,8 @@
 <mat-form-field class="currency-field-width">
-  <input matInput placeholder="$0.00" type="text" inputmode="decimal" [currencyMask]="{align: 'center'}" formControlName="amount" />
+  <input matInput placeholder="$0.00" type="text" inputmode="decimal"
+         [currencyMask]="{align: 'center'}"
+         [ngModel]="value"
+         (ngModelChange)="onValueChange($event)"
+         (blur)="onBlur()"
+         [disabled]="isDisabled" />
 </mat-form-field>
