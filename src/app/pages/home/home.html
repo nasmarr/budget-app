@@ -15,12 +15,20 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field floatLabel="always">
       <mat-label>Category</mat-label>
-      <input matInput formControlName="category" placeholder="e.g. Groceries, Rent, Salary">
+      <input matInput
+             formControlName="category"
+             placeholder="Type to search or create new"
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (category of filteredCategories$ | async; track category) {
+          <mat-option [value]="category">{{ category }}</mat-option>
+        }
+      </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field floatLabel="always">
       <mat-label>Description (optional)</mat-label>
       <input matInput formControlName="description" placeholder="Add notes about this transaction">
     </mat-form-field>
