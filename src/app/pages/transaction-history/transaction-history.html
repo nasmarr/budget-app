@@ -1,0 +1,36 @@
+<div class="history-container">
+  <h1>Transaction History</h1>
+
+  @if (transactions$ | async; as transactions) {
+    @if (transactions.length === 0) {
+      <div class="empty-state">
+        <mat-icon>receipt_long</mat-icon>
+        <p>No transactions yet. Start by adding your first transaction!</p>
+      </div>
+    } @else {
+      <div class="transactions-list">
+        @for (transaction of transactions; track transaction.id) {
+          <mat-card class="transaction-card">
+            <mat-card-header>
+              <div class="transaction-header">
+                <div class="transaction-info">
+                  <h3>{{ transaction.category }}</h3>
+                  <span class="transaction-date">{{ transaction.date | date: 'MMM d, y' }}</span>
+                </div>
+                <div class="transaction-amount" [class.income]="transaction.type === 'income'" [class.expense]="transaction.type === 'expense'">
+                  <span class="amount-sign">{{ transaction.type === 'income' ? '+' : '-' }}</span>
+                  {{ transaction.amount | currency }}
+                </div>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              @if (transaction.description) {
+                <p class="description">{{ transaction.description }}</p>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

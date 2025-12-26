@@ -1,1 +1,31 @@
-<app-home />
+<div class="app-container">
+  <!-- Desktop Top Toolbar -->
+  <mat-toolbar color="primary" class="top-nav">
+    <span class="app-title">Budget App</span>
+    <span class="spacer"></span>
+    <button mat-button routerLink="/home" routerLinkActive="active">
+      <mat-icon>add_circle</mat-icon>
+      Add Transaction
+    </button>
+    <button mat-button routerLink="/history" routerLinkActive="active">
+      <mat-icon>history</mat-icon>
+      History
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <router-outlet />
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-button" routerLink="/home" routerLinkActive="active">
+      <mat-icon>add_circle</mat-icon>
+      <span>Add</span>
+    </button>
+    <button class="nav-button" routerLink="/history" routerLinkActive="active">
+      <mat-icon>history</mat-icon>
+      <span>History</span>
+    </button>
+  </nav>
+</div>

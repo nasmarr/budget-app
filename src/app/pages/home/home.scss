@@ -3,7 +3,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100%;
+  padding: 24px;
+
+  // On desktop with top toolbar, adjust vertical centering
+  @media (min-width: 768px) {
+    min-height: calc(100vh - 64px);
+  }
 }
 
 form {

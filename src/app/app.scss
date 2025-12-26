@@ -1,0 +1,110 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Mobile-first: Show bottom nav by default
+.top-nav {
+  display: none;
+}
+
+.bottom-nav {
+  display: flex;
+}
+
+// Desktop: Show top toolbar, hide bottom nav
+@media (min-width: 768px) {
+  .top-nav {
+    display: flex;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+}
+
+// Top Toolbar Styles (Desktop)
+.top-nav {
+  .app-title {
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    &.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+  }
+}
+
+// Bottom Navigation Styles (Mobile)
+.bottom-nav {
+  justify-content: space-around;
+  align-items: center;
+  background-color: #1e1e1e;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+}
+
+.nav-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 8px 24px;
+  min-width: 80px;
+  min-height: 56px;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  span {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.active {
+    color: #ab47bc;
+
+    mat-icon {
+      color: #ab47bc;
+    }
+  }
+
+  &:hover:not(.active) {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
