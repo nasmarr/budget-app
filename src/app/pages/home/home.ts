@@ -10,9 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { TransactionType } from '../../models';
-import { CategoryService } from '../../services';
+import { CategoryService, TransactionService } from '../../services';
 
 
 @Component({
@@ -28,6 +29,7 @@ import { CategoryService } from '../../services';
     MatDatepickerModule,
     MatButtonModule,
     MatAutocompleteModule,
+    MatSnackBarModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss'
@@ -38,7 +40,11 @@ export class Home implements OnInit, OnDestroy {
   filteredCategories$!: Observable<string[]>;
   private destroy$ = new Subject<void>();
 
-  constructor(private categoryService: CategoryService) {
+  constructor(
+    private categoryService: CategoryService,
+    private transactionService: TransactionService,
+    private snackBar: MatSnackBar
+  ) {
     this.transactionForm = new FormGroup({
       amount: new FormControl<number | null>(null, [Validators.required, Validators.min(0.01)]),
       type: new FormControl<TransactionType>('expense', [Validators.required]),
@@ -67,8 +73,37 @@ export class Home implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (this.transactionForm.valid) {
-      console.log('Form submitted:', this.transactionForm.value);
-      // TODO: Save transaction using TransactionService (next phase)
+      const formValue = this.transactionForm.value;
+      const { amount, type, category, date, description } = formValue;
+
+      // Auto-create category if it doesn't exist
+      const categoryName = category.trim();
+      const existingCategory = this.categoryService.findByName(categoryName, type);
+
+      if (!existingCategory) {
+        this.categoryService.createCategory(categoryName, type);
+      }
+
+      // Create the transaction
+      const transaction = this.transactionService.createTransaction(
+        amount,
+        type,
+        categoryName,
+        date,
+        description
+      );
+
+      console.log('Transaction saved:', transaction);
+
+      // Show success message
+      const typeText = type === 'income' ? 'Income' : 'Expense';
+      this.snackBar.open(
+        `${typeText} of $${amount.toFixed(2)} added to ${categoryName}`,
+        'Close',
+        { duration: 3000 }
+      );
+
+      // Reset form with smart defaults
       this.transactionForm.reset({
         type: 'expense',
         date: new Date(),
