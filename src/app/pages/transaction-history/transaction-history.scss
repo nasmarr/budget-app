@@ -10,6 +10,62 @@ h1 {
   color: #fff;
 }
 
+// Search and Filters
+.search-filters {
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.search-field {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.type-filters {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+
+  mat-chip {
+    cursor: pointer;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease;
+
+    &[highlighted="true"] {
+      background-color: #ab47bc;
+      color: #fff;
+    }
+
+    &:hover:not([highlighted="true"]) {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.sort-field {
+  min-width: 180px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
 .empty-state {
   text-align: center;
   padding: 48px 24px;

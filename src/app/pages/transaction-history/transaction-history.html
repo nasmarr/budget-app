@@ -3,6 +3,40 @@
 
   <app-date-filter (filterChange)="onFilterChange($event)"></app-date-filter>
 
+  <!-- Search and Filters -->
+  <div class="search-filters">
+    <mat-form-field class="search-field">
+      <mat-label>Search transactions</mat-label>
+      <input matInput [formControl]="searchControl" (input)="applyFilters()" placeholder="Search by category or description">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="filter-row">
+      <mat-chip-set class="type-filters">
+        <mat-chip [highlighted]="selectedType === 'all'" (click)="setTypeFilter('all')">
+          All
+        </mat-chip>
+        <mat-chip [highlighted]="selectedType === 'income'" (click)="setTypeFilter('income')">
+          Income
+        </mat-chip>
+        <mat-chip [highlighted]="selectedType === 'expense'" (click)="setTypeFilter('expense')">
+          Expense
+        </mat-chip>
+      </mat-chip-set>
+
+      <mat-form-field class="sort-field">
+        <mat-label>Sort by</mat-label>
+        <mat-select [(value)]="sortBy" (selectionChange)="onSortChange()">
+          <mat-option value="date-desc">Newest First</mat-option>
+          <mat-option value="date-asc">Oldest First</mat-option>
+          <mat-option value="amount-desc">Highest Amount</mat-option>
+          <mat-option value="amount-asc">Lowest Amount</mat-option>
+          <mat-option value="category">Category A-Z</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
   @if (transactions$ | async; as transactions) {
     @if (transactions.length === 0) {
       <div class="empty-state">
