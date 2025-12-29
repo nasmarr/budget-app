@@ -53,9 +53,14 @@
                   <h3>{{ transaction.category }}</h3>
                   <span class="transaction-date">{{ transaction.date | date: 'MMM d, y' }}</span>
                 </div>
-                <div class="transaction-amount" [class.income]="transaction.type === 'income'" [class.expense]="transaction.type === 'expense'">
-                  <span class="amount-sign">{{ transaction.type === 'income' ? '+' : '-' }}</span>
-                  {{ transaction.amount | currency }}
+                <div class="transaction-actions">
+                  <div class="transaction-amount" [class.income]="transaction.type === 'income'" [class.expense]="transaction.type === 'expense'">
+                    <span class="amount-sign">{{ transaction.type === 'income' ? '+' : '-' }}</span>
+                    {{ transaction.amount | currency }}
+                  </div>
+                  <button mat-icon-button (click)="openEditDialog(transaction)" aria-label="Edit transaction">
+                    <mat-icon>edit</mat-icon>
+                  </button>
                 </div>
               </div>
             </mat-card-header>

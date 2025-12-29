@@ -129,6 +129,26 @@ h1 {
   }
 }
 
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  button {
+    color: rgba(255, 255, 255, 0.6);
+
+    &:hover {
+      color: #ab47bc;
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
 .transaction-amount {
   font-size: 20px;
   font-weight: 600;

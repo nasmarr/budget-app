@@ -9,9 +9,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Transaction, TransactionType } from '../../models';
-import { TransactionService } from '../../services';
+import { TransactionService, CategoryService } from '../../services';
 import { DateFilter, DateFilterValue } from '../../components/date-filter/date-filter';
+import { EditTransactionDialog } from '../../components/edit-transaction-dialog/edit-transaction-dialog';
 
 type SortOption = 'date-desc' | 'date-asc' | 'amount-desc' | 'amount-asc' | 'category';
 
@@ -28,6 +32,9 @@ type SortOption = 'date-desc' | 'date-asc' | 'amount-desc' | 'amount-asc' | 'cat
     MatFormFieldModule,
     MatSelectModule,
     MatChipsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatSnackBarModule,
     DateFilter
   ],
   templateUrl: './transaction-history.html',
@@ -39,7 +46,12 @@ export class TransactionHistory implements OnInit {
   selectedType: 'all' | TransactionType = 'all';
   sortBy: SortOption = 'date-desc';
 
-  constructor(private transactionService: TransactionService) {}
+  constructor(
+    private transactionService: TransactionService,
+    private categoryService: CategoryService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadTransactions({ period: 'month' });
@@ -126,5 +138,35 @@ export class TransactionHistory implements OnInit {
       default:
         return transactions;
     }
+  }
+
+  openEditDialog(transaction: Transaction): void {
+    const dialogRef = this.dialog.open(EditTransactionDialog, {
+      width: '500px',
+      maxWidth: '95vw',
+      data: transaction
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (result.action === 'save') {
+          // Auto-create category if it doesn't exist
+          const categoryName = result.data.category.trim();
+          const existingCategory = this.categoryService.findByName(categoryName, result.data.type);
+
+          if (!existingCategory) {
+            this.categoryService.createCategory(categoryName, result.data.type);
+          }
+
+          // Update the transaction
+          this.transactionService.updateTransaction(result.data.id, result.data);
+
+          this.snackBar.open('Transaction updated successfully', 'Close', { duration: 3000 });
+        } else if (result.action === 'delete') {
+          this.transactionService.deleteTransaction(result.data.id);
+          this.snackBar.open('Transaction deleted', 'Close', { duration: 3000 });
+        }
+      }
+    });
   }
 }
