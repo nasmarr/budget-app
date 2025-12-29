@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { map, startWith, takeUntil } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { Observable, Subject, combineLatest } from 'rxjs';
+import { map, startWith, takeUntil, debounceTime } from 'rxjs/operators';
+import { AsyncPipe, CurrencyPipe, DecimalPipe } from '@angular/common';
 import { CurrencyInput } from '../../components/currency-input/currency-input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -11,9 +11,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { TransactionType } from '../../models';
 import { CategoryService, TransactionService } from '../../services';
+
+interface BudgetWarning {
+  currentSpending: number;
+  budgetLimit: number;
+  percentUsed: number;
+  isNearLimit: boolean;
+  isOverLimit: boolean;
+}
 
 
 @Component({
@@ -22,6 +31,8 @@ import { CategoryService, TransactionService } from '../../services';
   imports: [
     ReactiveFormsModule,
     AsyncPipe,
+    CurrencyPipe,
+    DecimalPipe,
     CurrencyInput,
     MatButtonToggleModule,
     MatFormFieldModule,
@@ -30,6 +41,7 @@ import { CategoryService, TransactionService } from '../../services';
     MatButtonModule,
     MatAutocompleteModule,
     MatSnackBarModule,
+    MatIconModule,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss'
@@ -38,6 +50,7 @@ import { CategoryService, TransactionService } from '../../services';
 export class Home implements OnInit, OnDestroy {
   transactionForm: FormGroup;
   filteredCategories$!: Observable<string[]>;
+  budgetWarning: BudgetWarning | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -63,6 +76,17 @@ export class Home implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.setupCategoryAutocomplete();
+        this.budgetWarning = null; // Clear warning when type changes
+      });
+
+    // Check budget when category changes
+    this.transactionForm.get('category')?.valueChanges
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((categoryName) => {
+        this.checkBudgetWarning(categoryName);
       });
   }
 
@@ -108,6 +132,9 @@ export class Home implements OnInit, OnDestroy {
         type: 'expense',
         date: new Date(),
       });
+
+      // Clear budget warning
+      this.budgetWarning = null;
     }
   }
 
@@ -132,5 +159,54 @@ export class Home implements OnInit, OnDestroy {
     return categories.filter(category =>
       category.toLowerCase().includes(filterValue)
     );
+  }
+
+  private checkBudgetWarning(categoryName: string): void {
+    if (!categoryName || categoryName.trim() === '') {
+      this.budgetWarning = null;
+      return;
+    }
+
+    const type = this.transactionForm.get('type')?.value as TransactionType;
+
+    // Only check budget for expenses
+    if (type !== 'expense') {
+      this.budgetWarning = null;
+      return;
+    }
+
+    const category = this.categoryService.findByName(categoryName.trim(), type);
+
+    if (!category || !category.budgetLimit || category.budgetLimit <= 0) {
+      this.budgetWarning = null;
+      return;
+    }
+
+    // Get current month spending for this category
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    this.transactionService.getTransactionsByMonth(currentMonth, currentYear)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(transactions => {
+        const currentSpending = transactions
+          .filter(t => t.type === 'expense' && t.category === categoryName.trim())
+          .reduce((sum, t) => sum + t.amount, 0);
+
+        const percentUsed = (currentSpending / category.budgetLimit!) * 100;
+
+        if (percentUsed >= 80) {
+          this.budgetWarning = {
+            currentSpending,
+            budgetLimit: category.budgetLimit!,
+            percentUsed,
+            isNearLimit: percentUsed >= 80 && percentUsed < 100,
+            isOverLimit: percentUsed >= 100
+          };
+        } else {
+          this.budgetWarning = null;
+        }
+      });
   }
 }

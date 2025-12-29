@@ -28,6 +28,20 @@
       </mat-autocomplete>
     </mat-form-field>
 
+    <!-- Budget Warning Alert -->
+    @if (budgetWarning) {
+      <div class="budget-alert" [class.warning]="budgetWarning.isNearLimit" [class.error]="budgetWarning.isOverLimit">
+        <mat-icon>{{ budgetWarning.isOverLimit ? 'error' : 'warning' }}</mat-icon>
+        <div class="alert-content">
+          <strong>{{ budgetWarning.isOverLimit ? 'Budget Exceeded!' : 'Approaching Budget Limit' }}</strong>
+          <p>
+            {{ budgetWarning.currentSpending | currency }} of {{ budgetWarning.budgetLimit | currency }}
+            ({{ budgetWarning.percentUsed | number: '1.0-0' }}%) spent this month
+          </p>
+        </div>
+      </div>
+    }
+
     <mat-form-field floatLabel="always">
       <mat-label>Description (optional)</mat-label>
       <input matInput formControlName="description" placeholder="Add notes about this transaction">
