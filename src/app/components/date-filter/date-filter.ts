@@ -32,7 +32,7 @@ export interface DateFilterValue {
 export class DateFilter {
   @Output() filterChange = new EventEmitter<DateFilterValue>();
 
-  selectedFilter: FilterPeriod = 'all';
+  selectedFilter: FilterPeriod = 'month';
   showDatePicker = false;
 
   dateRangeForm = new FormGroup({

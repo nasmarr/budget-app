@@ -42,7 +42,7 @@ export class TransactionHistory implements OnInit {
   constructor(private transactionService: TransactionService) {}
 
   ngOnInit(): void {
-    this.loadTransactions({ period: 'all' });
+    this.loadTransactions({ period: 'month' });
   }
 
   onFilterChange(filter: DateFilterValue): void {

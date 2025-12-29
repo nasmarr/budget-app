@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { TransactionService, TransactionSummary } from '../../services';
+import { TransactionService, TransactionSummary, CategoryService } from '../../services';
 import { DateFilter, DateFilterValue } from '../../components/date-filter/date-filter';
 
 interface ChartData {
   name: string;
   value: number;
+}
+
+interface BudgetComparisonData {
+  name: string;
+  series: { name: string; value: number }[];
 }
 
 @Component({
@@ -23,6 +28,10 @@ export class CategoryBreakdown implements OnInit {
   summary$!: Observable<TransactionSummary>;
   expensesByCategory$!: Observable<ChartData[]>;
   incomeByCategory$!: Observable<ChartData[]>;
+  budgetComparison$!: Observable<BudgetComparisonData[]>;
+
+  currentFilter: DateFilterValue = { period: 'month' };
+  showBudgetComparison = true;
 
   // Chart configuration - use built-in color scheme
   colorScheme: any = {
@@ -32,13 +41,25 @@ export class CategoryBreakdown implements OnInit {
     domain: ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50']
   };
 
-  constructor(private transactionService: TransactionService) {}
+  budgetColorScheme: any = {
+    name: 'budget',
+    selectable: true,
+    group: 'Ordinal',
+    domain: ['#2196f3', '#4caf50'] // Blue for Actual, Green for Budget
+  };
+
+  constructor(
+    private transactionService: TransactionService,
+    private categoryService: CategoryService
+  ) {}
 
   ngOnInit(): void {
-    this.loadData({ period: 'all' });
+    this.loadData({ period: 'month' });
   }
 
   onFilterChange(filter: DateFilterValue): void {
+    this.currentFilter = filter;
+    this.showBudgetComparison = filter.period === 'month';
     this.loadData(filter);
   }
 
@@ -108,5 +129,43 @@ export class CategoryBreakdown implements OnInit {
           .sort((a, b) => b.value - a.value);
       })
     );
+
+    // Calculate budget vs. actual comparison (only for current month)
+    if (filter.period === 'month') {
+      this.budgetComparison$ = combineLatest([
+        transactions$,
+        this.categoryService.getCategories()
+      ]).pipe(
+        map(([transactions, categories]) => {
+          // Get categories with budget limits
+          const categoriesWithLimits = categories.filter(cat => cat.budgetLimit && cat.budgetLimit > 0);
+
+          if (categoriesWithLimits.length === 0) {
+            return [];
+          }
+
+          // Calculate actual spending per category
+          const actualByCategory = new Map<string, number>();
+          transactions.forEach((t: any) => {
+            actualByCategory.set(t.category, (actualByCategory.get(t.category) || 0) + t.amount);
+          });
+
+          // Create comparison data
+          return categoriesWithLimits
+            .map(category => {
+              const actual = actualByCategory.get(category.name) || 0;
+              return {
+                name: category.name,
+                series: [
+                  { name: 'Actual', value: actual },
+                  { name: 'Budget', value: category.budgetLimit || 0 }
+                ]
+              };
+            })
+            .filter(item => item.series[1].value > 0) // Only show categories with budget set
+            .sort((a, b) => a.name.localeCompare(b.name));
+        })
+      );
+    }
   }
 }

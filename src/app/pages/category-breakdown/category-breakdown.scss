@@ -109,6 +109,14 @@ h2 {
   height: 400px;
   width: 100%;
 
+  &.bar-chart {
+    height: 450px;
+
+    @media (max-width: 768px) {
+      height: 350px;
+    }
+  }
+
   @media (max-width: 768px) {
     height: 300px;
   }
@@ -124,6 +132,21 @@ h2 {
     .pie-label,
     .label {
       fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Axis labels (for bar charts)
+    .x.axis .tick text,
+    .y.axis .tick text {
+      fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .axis-label {
+      fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Grid lines
+    .gridline-path {
+      stroke: rgba(255, 255, 255, 0.1) !important;
     }
 
     // Tooltip
