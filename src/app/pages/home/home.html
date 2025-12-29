@@ -21,6 +21,11 @@
              formControlName="category"
              placeholder="Type to search or create new"
              [matAutocomplete]="auto">
+      @if (transactionForm.get('category')?.value) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearCategory()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
       <mat-autocomplete #auto="matAutocomplete">
         @for (category of filteredCategories$ | async; track category) {
           <mat-option [value]="category">{{ category }}</mat-option>
@@ -45,6 +50,11 @@
     <mat-form-field floatLabel="always">
       <mat-label>Description (optional)</mat-label>
       <input matInput formControlName="description" placeholder="Add notes about this transaction">
+      @if (transactionForm.get('description')?.value) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearDescription()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </mat-form-field>
 
     <button mat-raised-button color="primary" type="submit" [disabled]="!transactionForm.valid">

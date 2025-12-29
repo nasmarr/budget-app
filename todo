@@ -8,4 +8,4 @@ Import/Export functionality
   since all data is stored locally, clearing cache/cookies could erase everything!
   that would be BAD
 Add bar chart to show spent vs limit for range if month is selected
-
+display $ value in pie charts

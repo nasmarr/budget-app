@@ -95,6 +95,15 @@ export class Home implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  clearCategory(): void {
+    this.transactionForm.get('category')?.setValue('');
+    this.budgetWarning = null;
+  }
+
+  clearDescription(): void {
+    this.transactionForm.get('description')?.setValue('');
+  }
+
   onSubmit(): void {
     if (this.transactionForm.valid) {
       const formValue = this.transactionForm.value;
