@@ -1,29 +1,13 @@
 <div class="history-container">
   <h1>Transaction History</h1>
 
-  <mat-chip-set class="filter-chips">
-    <mat-chip [highlighted]="selectedFilter === 'all'" (click)="setFilter('all')">
-      All Time
-    </mat-chip>
-    <mat-chip [highlighted]="selectedFilter === 'year'" (click)="setFilter('year')">
-      This Year
-    </mat-chip>
-    <mat-chip [highlighted]="selectedFilter === 'month'" (click)="setFilter('month')">
-      This Month
-    </mat-chip>
-  </mat-chip-set>
+  <app-date-filter (filterChange)="onFilterChange($event)"></app-date-filter>
 
   @if (transactions$ | async; as transactions) {
     @if (transactions.length === 0) {
       <div class="empty-state">
         <mat-icon>receipt_long</mat-icon>
-        @if (selectedFilter === 'all') {
-          <p>No transactions yet. Start by adding your first transaction!</p>
-        } @else if (selectedFilter === 'month') {
-          <p>No transactions this month.</p>
-        } @else {
-          <p>No transactions this year.</p>
-        }
+        <p>No transactions found for the selected period.</p>
       </div>
     } @else {
       <div class="transactions-list">

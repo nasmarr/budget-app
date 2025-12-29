@@ -112,6 +112,38 @@ h2 {
   @media (max-width: 768px) {
     height: 300px;
   }
+
+  // Style ngx-charts for dark mode
+  ::ng-deep {
+    // Legend text
+    .legend-label {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Chart labels
+    .pie-label,
+    .label {
+      fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Tooltip
+    .tooltip-anchor {
+      fill: #fff !important;
+    }
+
+    // Advanced legend
+    .advanced-pie-legend {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .legend-label-text {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .legend-title-text {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+  }
 }
 
 // Empty State

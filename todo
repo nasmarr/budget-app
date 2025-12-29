@@ -1,4 +1,6 @@
 Do not allow user to remove / characters from date
 Users should be able to edit historic transactions
 History should allow user to filter by exact dates
+more advanced filters on history page
+i.e. category, 'sort by asc/desc', etc, etc.
 

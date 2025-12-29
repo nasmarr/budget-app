@@ -1,6 +1,8 @@
 <div class="breakdown-container">
   <h1>Category Breakdown</h1>
 
+  <app-date-filter (filterChange)="onFilterChange($event)"></app-date-filter>
+
   @if (summary$ | async; as summary) {
     <!-- Summary Cards -->
     <div class="summary-cards">
@@ -40,7 +42,9 @@
               [scheme]="colorScheme"
               [legend]="true"
               [labels]="true"
-              [doughnut]="false">
+              [doughnut]="false"
+              [trimLabels]="true"
+              [maxLabelLength]="15">
             </ngx-charts-pie-chart>
           </div>
         </div>
@@ -57,7 +61,9 @@
               [scheme]="colorScheme"
               [legend]="true"
               [labels]="true"
-              [doughnut]="false">
+              [doughnut]="false"
+              [trimLabels]="true"
+              [maxLabelLength]="15">
             </ngx-charts-pie-chart>
           </div>
         </div>
