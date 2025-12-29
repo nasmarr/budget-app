@@ -45,7 +45,7 @@ export class CategoryBreakdown implements OnInit {
     name: 'budget',
     selectable: true,
     group: 'Ordinal',
-    domain: ['#2196f3', '#4caf50'] // Blue for Actual, Green for Budget
+    domain: ['#4caf50', '#2196f3']
   };
 
   constructor(
@@ -152,16 +152,13 @@ export class CategoryBreakdown implements OnInit {
 
           // Create comparison data
           return categoriesWithLimits
-            .map(category => {
-              const actual = actualByCategory.get(category.name) || 0;
-              return {
-                name: category.name,
-                series: [
-                  { name: 'Actual', value: actual },
-                  { name: 'Budget', value: category.budgetLimit || 0 }
-                ]
-              };
-            })
+            .map(category => ({
+              name: category.name,
+              series: [
+                { name: 'Actual', value: actualByCategory.get(category.name) || 0 },
+                { name: 'Budget', value: category.budgetLimit || 0 }
+              ]
+            }))
             .filter(item => item.series[1].value > 0) // Only show categories with budget set
             .sort((a, b) => a.name.localeCompare(b.name));
         })

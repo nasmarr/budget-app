@@ -140,7 +140,21 @@ h2 {
       fill: rgba(255, 255, 255, 0.9) !important;
     }
 
-    .axis-label {
+    .axis-label,
+    .y.axis .axis-label,
+    .x.axis .axis-label,
+    text.axis-label,
+    .y-axis-label,
+    .x-axis-label,
+    text.y-axis-label,
+    text.x-axis-label {
+      fill: rgba(255, 255, 255, 0.9) !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Additional catch-all for any text in axes
+    .y.axis text,
+    .x.axis text {
       fill: rgba(255, 255, 255, 0.9) !important;
     }
 
