@@ -1,7 +1,13 @@
-.mat-mdc-input-element {
-  font-size: 48px !important;
-}
-
 .currency-field-width {
   width: 100%;
+
+  .mat-mdc-input-element {
+    font-size: 48px !important;
+  }
+
+  &.size-normal {
+    .mat-mdc-input-element {
+      font-size: 16px !important;
+    }
+  }
 }

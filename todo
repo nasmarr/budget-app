@@ -4,4 +4,8 @@ History should allow user to filter by exact dates
 more advanced filters on history page
 i.e. category, 'sort by asc/desc', etc, etc.
 pagination on history page? could eventually contain HUNDREDS to THOUSANDS of items here
+Import/Export functionality
+  since all data is stored locally, clearing cache/cookies could erase everything!
+  that would be BAD
+Add bar chart to show spent vs limit for range if month is selected
 

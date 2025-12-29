@@ -1,0 +1,138 @@
+<div class="limits-container">
+  <h1>Budget Limits</h1>
+  <p class="subtitle">Set monthly budget limits for your categories</p>
+
+  <!-- Expense Categories -->
+  <div class="section">
+    <h2>Expense Categories</h2>
+    @if (expenseCategories$ | async; as categories) {
+      @if (categories.length === 0) {
+        <div class="empty-state">
+          <mat-icon>category</mat-icon>
+          <p>No expense categories yet. Add a transaction to create categories!</p>
+        </div>
+      } @else {
+        <div class="categories-list">
+          @for (category of categories; track category.id) {
+            <mat-card class="category-card" [class]="getStatusClass(category)">
+              <div class="category-header">
+                <div class="category-info">
+                  <h3>{{ category.name }}</h3>
+                  <div class="spending-info">
+                    <span class="current-spending">{{ category.currentMonthSpending | currency }}</span>
+                    @if (category.budgetLimit) {
+                      <span class="budget-separator">/</span>
+                      <span class="budget-limit">{{ category.budgetLimit | currency }}</span>
+                      <span class="percent-used">({{ category.percentUsed | number: '1.0-0' }}%)</span>
+                    } @else {
+                      <span class="no-limit">No limit set</span>
+                    }
+                  </div>
+                </div>
+
+                @if (!isEditing(category.id)) {
+                  <button mat-icon-button (click)="startEditing(category)" class="edit-button">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+              </div>
+
+              @if (isEditing(category.id)) {
+                <mat-divider></mat-divider>
+                <div class="edit-section">
+                  <app-currency-input
+                    [formControl]="getBudgetLimitControl(category.id)"
+                    size="normal"
+                    label="Monthly Budget Limit">
+                  </app-currency-input>
+
+                  <div class="action-buttons">
+                    <button mat-raised-button color="primary" (click)="saveBudgetLimit(category)">
+                      Save
+                    </button>
+                    <button mat-button (click)="cancelEditing()">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              }
+
+              @if (category.budgetLimit && category.budgetLimit > 0) {
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="category.percentUsed > 100 ? 100 : category.percentUsed"></div>
+                </div>
+              }
+            </mat-card>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Income Categories -->
+  <div class="section">
+    <h2>Income Categories</h2>
+    @if (incomeCategories$ | async; as categories) {
+      @if (categories.length === 0) {
+        <div class="empty-state">
+          <mat-icon>category</mat-icon>
+          <p>No income categories yet. Add a transaction to create categories!</p>
+        </div>
+      } @else {
+        <div class="categories-list">
+          @for (category of categories; track category.id) {
+            <mat-card class="category-card income-card">
+              <div class="category-header">
+                <div class="category-info">
+                  <h3>{{ category.name }}</h3>
+                  <div class="spending-info">
+                    <span class="current-spending">{{ category.currentMonthSpending | currency }}</span>
+                    @if (category.budgetLimit) {
+                      <span class="budget-separator">/</span>
+                      <span class="budget-limit">{{ category.budgetLimit | currency }}</span>
+                      <span class="percent-used">({{ category.percentUsed | number: '1.0-0' }}%)</span>
+                    } @else {
+                      <span class="no-limit">No target set</span>
+                    }
+                  </div>
+                </div>
+
+                @if (!isEditing(category.id)) {
+                  <button mat-icon-button (click)="startEditing(category)" class="edit-button">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+              </div>
+
+              @if (isEditing(category.id)) {
+                <mat-divider></mat-divider>
+                <div class="edit-section">
+                  <app-currency-input
+                    [formControl]="getBudgetLimitControl(category.id)"
+                    size="normal"
+                    label="Monthly Income Target">
+                  </app-currency-input>
+
+                  <div class="action-buttons">
+                    <button mat-raised-button color="primary" (click)="saveBudgetLimit(category)">
+                      Save
+                    </button>
+                    <button mat-button (click)="cancelEditing()">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              }
+
+              @if (category.budgetLimit && category.budgetLimit > 0) {
+                <div class="progress-bar income-progress">
+                  <div class="progress-fill" [style.width.%]="category.percentUsed > 100 ? 100 : category.percentUsed"></div>
+                </div>
+              }
+            </mat-card>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

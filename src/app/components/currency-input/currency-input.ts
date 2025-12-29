@@ -1,12 +1,12 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
-import { MatFormField } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/input';
 import { NgxCurrencyDirective } from 'ngx-currency';
 
 @Component({
   selector: 'app-currency-input',
-  imports: [NgxCurrencyDirective, MatInput, MatFormField, FormsModule],
+  imports: [NgxCurrencyDirective, MatInput, MatFormField, MatLabel, FormsModule],
   templateUrl: './currency-input.html',
   styleUrl: './currency-input.scss',
   providers: [
@@ -18,6 +18,8 @@ import { NgxCurrencyDirective } from 'ngx-currency';
   ]
 })
 export class CurrencyInput implements ControlValueAccessor {
+  @Input() size: 'large' | 'normal' = 'large';
+  @Input() label: string = '';
   value: number | null = null;
   isDisabled = false;
 
