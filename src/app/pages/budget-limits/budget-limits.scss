@@ -1,0 +1,185 @@
+.limits-container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 24px;
+  color: #fff;
+}
+
+.subtitle {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+// Sections
+.section {
+  margin-bottom: 32px;
+}
+
+h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #fff;
+}
+
+// Categories List
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// Category Cards
+.category-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 16px !important;
+  transition: all 0.2s ease;
+
+  &.under-budget {
+    border-left: 4px solid #4caf50;
+  }
+
+  &.near-budget {
+    border-left: 4px solid #ff9800;
+  }
+
+  &.over-budget {
+    border-left: 4px solid #f44336;
+  }
+
+  &.income-card {
+    border-left: 4px solid rgba(76, 175, 80, 0.3);
+  }
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.category-info {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .spending-info {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 14px;
+
+    .current-spending {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+
+    .budget-separator {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .budget-limit {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .percent-used {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+    }
+
+    .no-limit {
+      color: rgba(255, 255, 255, 0.5);
+      font-style: italic;
+      font-size: 13px;
+    }
+  }
+}
+
+.edit-button {
+  color: rgba(255, 255, 255, 0.7);
+
+  &:hover {
+    color: #ab47bc;
+  }
+}
+
+// Edit Section
+.edit-section {
+  margin-top: 16px;
+  padding-top: 16px;
+
+  app-currency-input {
+    max-width: 300px;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+}
+
+// Progress Bar
+.progress-bar {
+  margin-top: 12px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+
+  .progress-fill {
+    height: 100%;
+    background-color: #f44336;
+    transition: width 0.3s ease;
+    border-radius: 3px;
+  }
+}
+
+.category-card.under-budget .progress-bar .progress-fill {
+  background-color: #4caf50;
+}
+
+.category-card.near-budget .progress-bar .progress-fill {
+  background-color: #ff9800;
+}
+
+.category-card.over-budget .progress-bar .progress-fill {
+  background-color: #f44336;
+}
+
+.income-progress .progress-fill {
+  background-color: #4caf50 !important;
+}
+
+// Empty State
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 14px;
+    margin: 0;
+  }
+}

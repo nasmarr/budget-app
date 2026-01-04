@@ -1,0 +1,77 @@
+<div class="history-container">
+  <h1>Transaction History</h1>
+
+  <app-date-filter (filterChange)="onFilterChange($event)"></app-date-filter>
+
+  <!-- Search and Filters -->
+  <div class="search-filters">
+    <mat-form-field class="search-field">
+      <mat-label>Search transactions</mat-label>
+      <input matInput [formControl]="searchControl" (input)="applyFilters()" placeholder="Search by category or description">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="filter-row">
+      <mat-chip-set class="type-filters">
+        <mat-chip [highlighted]="selectedType === 'all'" (click)="setTypeFilter('all')">
+          All
+        </mat-chip>
+        <mat-chip [highlighted]="selectedType === 'income'" (click)="setTypeFilter('income')">
+          Income
+        </mat-chip>
+        <mat-chip [highlighted]="selectedType === 'expense'" (click)="setTypeFilter('expense')">
+          Expense
+        </mat-chip>
+      </mat-chip-set>
+
+      <mat-form-field class="sort-field">
+        <mat-label>Sort by</mat-label>
+        <mat-select [(value)]="sortBy" (selectionChange)="onSortChange()">
+          <mat-option value="date-desc">Newest First</mat-option>
+          <mat-option value="date-asc">Oldest First</mat-option>
+          <mat-option value="amount-desc">Highest Amount</mat-option>
+          <mat-option value="amount-asc">Lowest Amount</mat-option>
+          <mat-option value="category">Category A-Z</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  @if (transactions$ | async; as transactions) {
+    @if (transactions.length === 0) {
+      <div class="empty-state">
+        <mat-icon>receipt_long</mat-icon>
+        <p>No transactions found for the selected period.</p>
+      </div>
+    } @else {
+      <div class="transactions-list">
+        @for (transaction of transactions; track transaction.id) {
+          <mat-card class="transaction-card">
+            <mat-card-header>
+              <div class="transaction-header">
+                <div class="transaction-info">
+                  <h3>{{ transaction.category }}</h3>
+                  <span class="transaction-date">{{ transaction.date | date: 'MMM d, y' }}</span>
+                </div>
+                <div class="transaction-actions">
+                  <div class="transaction-amount" [class.income]="transaction.type === 'income'" [class.expense]="transaction.type === 'expense'">
+                    <span class="amount-sign">{{ transaction.type === 'income' ? '+' : '-' }}</span>
+                    {{ transaction.amount | currency }}
+                  </div>
+                  <button mat-icon-button (click)="openEditDialog(transaction)" aria-label="Edit transaction">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              @if (transaction.description) {
+                <p class="description">{{ transaction.description }}</p>
+              }
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

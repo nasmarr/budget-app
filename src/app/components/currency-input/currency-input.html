@@ -1,0 +1,11 @@
+<mat-form-field class="currency-field-width" [class.size-normal]="size === 'normal'" [floatLabel]="label ? 'always' : 'auto'">
+  @if (label) {
+    <mat-label>{{ label }}</mat-label>
+  }
+  <input matInput placeholder="$0.00" type="text" inputmode="decimal"
+         [currencyMask]="{align: size === 'large' ? 'center' : 'left'}"
+         [ngModel]="value"
+         (ngModelChange)="onValueChange($event)"
+         (blur)="onBlur()"
+         [disabled]="isDisabled" />
+</mat-form-field>

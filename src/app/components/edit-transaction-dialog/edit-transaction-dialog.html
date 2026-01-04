@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Edit Transaction</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="transactionForm" class="edit-form">
+    <app-currency-input formControlName="amount" size="normal" label="Amount"/>
+
+    <mat-button-toggle-group formControlName="type" name="transType" aria-label="Transaction Type">
+      <mat-button-toggle value="income">Income</mat-button-toggle>
+      <mat-button-toggle value="expense">Expense</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Category</mat-label>
+      <input matInput
+             formControlName="category"
+             placeholder="Type to search or create new"
+             [matAutocomplete]="auto">
+      @if (transactionForm.get('category')?.value) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearCategory()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (category of filteredCategories$ | async; track category) {
+          <mat-option [value]="category">{{ category }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Description (optional)</mat-label>
+      <input matInput formControlName="description" placeholder="Add notes about this transaction">
+      @if (transactionForm.get('description')?.value) {
+        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearDescription()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="onDelete()">
+    <mat-icon>delete</mat-icon>
+    Delete
+  </button>
+  <div class="spacer"></div>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!transactionForm.valid">
+    Save Changes
+  </button>
+</mat-dialog-actions>

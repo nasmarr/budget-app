@@ -1,0 +1,51 @@
+.date-filter {
+  margin-bottom: 20px;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  mat-chip {
+    cursor: pointer;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease;
+
+    &[highlighted="true"] {
+      background-color: #ab47bc;
+      color: #fff;
+    }
+
+    &:hover:not([highlighted="true"]) {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.date-range-form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 16px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  button {
+    margin-top: 8px;
+  }
+}

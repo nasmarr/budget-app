@@ -1,0 +1,203 @@
+.breakdown-container {
+  padding: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #fff;
+}
+
+h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #fff;
+}
+
+// Summary Cards
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px !important;
+  background-color: rgba(255, 255, 255, 0.05);
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+    }
+
+    .amount {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  &.income {
+    mat-icon {
+      color: #4caf50;
+    }
+
+    .amount {
+      color: #4caf50;
+    }
+  }
+
+  &.expense {
+    mat-icon {
+      color: #f44336;
+    }
+
+    .amount {
+      color: #f44336;
+    }
+  }
+
+  &.net {
+    &.positive {
+      mat-icon {
+        color: #4caf50;
+      }
+
+      .amount {
+        color: #4caf50;
+      }
+    }
+
+    &.negative {
+      mat-icon {
+        color: #ff9800;
+      }
+
+      .amount {
+        color: #ff9800;
+      }
+    }
+  }
+}
+
+// Charts
+.chart-section {
+  margin-bottom: 32px;
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.chart-container {
+  height: 400px;
+  width: 100%;
+
+  &.bar-chart {
+    height: 450px;
+
+    @media (max-width: 768px) {
+      height: 350px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: 300px;
+  }
+
+  // Style ngx-charts for dark mode
+  ::ng-deep {
+    // Legend text
+    .legend-label {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Chart labels
+    .pie-label,
+    .label {
+      fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Axis labels (for bar charts)
+    .x.axis .tick text,
+    .y.axis .tick text {
+      fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .axis-label,
+    .y.axis .axis-label,
+    .x.axis .axis-label,
+    text.axis-label,
+    .y-axis-label,
+    .x-axis-label,
+    text.y-axis-label,
+    text.x-axis-label {
+      fill: rgba(255, 255, 255, 0.9) !important;
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Additional catch-all for any text in axes
+    .y.axis text,
+    .x.axis text {
+      fill: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    // Grid lines
+    .gridline-path {
+      stroke: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    // Tooltip
+    .tooltip-anchor {
+      fill: #fff !important;
+    }
+
+    // Advanced legend
+    .advanced-pie-legend {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .legend-label-text {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .legend-title-text {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+  }
+}
+
+// Empty State
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: rgba(255, 255, 255, 0.7);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,104 @@
+<div class="breakdown-container">
+  <h1>Category Breakdown</h1>
+
+  <app-date-filter (filterChange)="onFilterChange($event)"></app-date-filter>
+
+  @if (summary$ | async; as summary) {
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <mat-card class="summary-card income">
+        <mat-icon>trending_up</mat-icon>
+        <div class="card-content">
+          <span class="label">Total Income</span>
+          <span class="amount">{{ summary.totalIncome | currency }}</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="summary-card expense">
+        <mat-icon>trending_down</mat-icon>
+        <div class="card-content">
+          <span class="label">Total Expenses</span>
+          <span class="amount">{{ summary.totalExpenses | currency }}</span>
+        </div>
+      </mat-card>
+
+      <mat-card class="summary-card net" [class.positive]="summary.netAmount >= 0" [class.negative]="summary.netAmount < 0">
+        <mat-icon>{{ summary.netAmount >= 0 ? 'account_balance_wallet' : 'warning' }}</mat-icon>
+        <div class="card-content">
+          <span class="label">Net</span>
+          <span class="amount">{{ summary.netAmount | currency }}</span>
+        </div>
+      </mat-card>
+    </div>
+
+    @if (summary.transactionCount === 0) {
+      <div class="empty-state">
+        <mat-icon>pie_chart</mat-icon>
+        <p>No transactions to display. Add some transactions to see your breakdown!</p>
+      </div>
+    }
+  }
+
+  <!-- Budget vs. Actual Comparison (This Month Only) -->
+  @if (showBudgetComparison) {
+    @if (budgetComparison$ | async; as comparisonData) {
+      @if (comparisonData.length > 0) {
+        <div class="chart-section">
+          <h2>Budget vs. Actual (This Month)</h2>
+          <div class="chart-container bar-chart">
+            <ngx-charts-bar-vertical-2d
+              [results]="comparisonData"
+              [scheme]="budgetColorScheme"
+              [legend]="true"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showXAxisLabel]="false"
+              [showYAxisLabel]="true"
+              [yAxisLabel]="'Amount'"
+              [groupPadding]="16">
+            </ngx-charts-bar-vertical-2d>
+          </div>
+        </div>
+      }
+    }
+  }
+
+  <!-- Charts Section -->
+  @if (expensesByCategory$ | async; as expensesData) {
+    @if (expensesData.length > 0) {
+      <div class="chart-section">
+        <h2>Expenses by Category</h2>
+        <div class="chart-container">
+          <ngx-charts-pie-chart
+            [results]="expensesData"
+            [scheme]="colorScheme"
+            [legend]="true"
+            [labels]="true"
+            [doughnut]="false"
+            [trimLabels]="true"
+            [maxLabelLength]="15">
+          </ngx-charts-pie-chart>
+        </div>
+      </div>
+    }
+  }
+
+  @if (incomeByCategory$ | async; as incomeData) {
+    @if (incomeData.length > 0) {
+      <div class="chart-section">
+        <h2>Income by Category</h2>
+        <div class="chart-container">
+          <ngx-charts-pie-chart
+            [results]="incomeData"
+            [scheme]="colorScheme"
+            [legend]="true"
+            [labels]="true"
+            [doughnut]="false"
+            [trimLabels]="true"
+            [maxLabelLength]="15">
+          </ngx-charts-pie-chart>
+        </div>
+      </div>
+    }
+  }
+</div>

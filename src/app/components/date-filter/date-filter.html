@@ -1,0 +1,38 @@
+<div class="date-filter">
+  <mat-chip-set class="filter-chips">
+    <mat-chip [highlighted]="selectedFilter === 'all'" (click)="setFilter('all')">
+      All Time
+    </mat-chip>
+    <mat-chip [highlighted]="selectedFilter === 'year'" (click)="setFilter('year')">
+      This Year
+    </mat-chip>
+    <mat-chip [highlighted]="selectedFilter === 'month'" (click)="setFilter('month')">
+      This Month
+    </mat-chip>
+    <mat-chip [highlighted]="selectedFilter === 'custom'" (click)="setFilter('custom')">
+      Custom Range
+    </mat-chip>
+  </mat-chip-set>
+
+  @if (showDatePicker) {
+    <form [formGroup]="dateRangeForm" class="date-range-form" (ngSubmit)="applyCustomRange()">
+      <mat-form-field>
+        <mat-label>Start date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="start">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>End date</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="end">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="!dateRangeForm.valid || !dateRangeForm.get('start')?.value || !dateRangeForm.get('end')?.value">
+        Apply
+      </button>
+    </form>
+  }
+</div>
